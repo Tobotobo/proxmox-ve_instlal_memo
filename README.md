@@ -83,3 +83,49 @@
     ![alt text](images/README/image-1.png)  
     ![alt text](images/README/image-2.png)  
     ※有効なサブスクリプションがありません と表示されるが無料で使っててそのとおりなので、おまじないだと思って OK を押す
+
+### Proxmox VE をコマンドラインで操作する
+方法は３つ  
+①Proxmox VE をインストールした端末で直接操作  
+②WEBコンソールを使う  
+③SSHを使う
+
+#### ①Proxmox VE をインストールした端末で直接操作  
+* 説明不要
+
+#### ②WEBコンソールを使う
+* Proxmox VE にブラウザからログイン
+* 左側データセンターから操作したいノードを右クリック
+* 右クリックメニューから「>_ シェル」を選択  
+    ![alt text](images/README/image-3.png)
+* 別ウィンドウでWEBコンソールが起動する  
+    ![alt text](images/README/image-4.png)
+
+#### ③SSHを使う  
+* 適当なターミナルで `ssh root@192.168.1.100` を実行　※IPは読み替えて
+* パスワード入力してログイン　※パスワードはインストール時に設定したやつ  
+    ![alt text](images/README/image-5.png)
+
+### mDNS を使って名前解決できるようにする　※お好みで
+
+* [Proxmox VE をコマンドラインで操作する](#proxmox-ve-をコマンドラインで操作する) の何れかでログインして以下を実行
+    ```
+    apt update
+    apt -y install avahi-daemon
+    systemctl start avahi-daemon
+    systemctl enable avahi-daemon
+    ```
+* 他の端末から名前解決できるようになったか確認　※ホスト名は読み替えて  
+    ![alt text](images/README/image-6.png)
+
+mDNS（multicast DNS）とは  
+https://e-words.jp/w/mDNS.html  
+> ローカルネットワーク内でホスト名からIPアドレスを割り出すために用いられる通信規約（プロトコル）の一つ。DNS（Domain Name System）の問い合わせをIPマルチキャストで同報送信する。
+
+avahi-daemonとは？  
+https://tech-hint.hatenablog.com/entry/2023/02/15/101129  
+> avahi-daemonは、LinuxやUNIXベースのオペレーティングシステムで動作する、ネットワークサービスの自動検出および設定のためのデーモン（daemon）です。
+
+avahi-daemon で マルチキャストDNS をサポートする  
+https://101010.fun/programming/avahi-daemon.html  
+> avahi-daemon は mDNS（マルチキャストDNS）をサポートし、LAN内のサーバーへドメインでアクセスできるように名前解決してくれます。
